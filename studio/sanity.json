@@ -28,10 +28,7 @@
       "implements": "part:@sanity/base/theme/variables/override-style",
       "path": "./src/styles/variables.css"
     },
-    {
-      "name": "part:@sanity/desk-tool/structure",
-      "path": "./src/structure/deskStructure.js"
-    },
+
     {
       "implements": "part:@sanity/dashboard/config",
       "path": "./src/dashboardConfig.js"
