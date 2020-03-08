@@ -10,6 +10,11 @@ export default {
       name: 'language',
       type: 'reference',
       to: [{ type: 'languages' }]
+    },
+    {
+      name: 'assignments',
+      type: 'array',
+      of: [{ type: 'assignment' }]
     }
   ],
   preview: {

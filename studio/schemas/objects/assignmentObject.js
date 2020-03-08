@@ -5,6 +5,11 @@ export default {
     {
       name: 'heading',
       type: 'string'
+    },
+    {
+      name: 'type',
+      type: 'reference',
+      to: [{ type: 'assignmentTypes' }]
     }
   ]
 }

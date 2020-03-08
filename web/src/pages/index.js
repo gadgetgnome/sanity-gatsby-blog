@@ -1,64 +1,28 @@
 import React from "react";
-import { graphql } from "gatsby";
+import { graphql, Link } from "gatsby";
 import {
   mapEdgesToNodes,
   filterOutDocsWithoutSlugs,
   filterOutDocsPublishedInTheFuture
 } from "../lib/helpers";
-import BlogPostPreviewList from "../components/blog-post-preview-list";
+
 import Container from "../components/container";
 import GraphQLErrorList from "../components/graphql-error-list";
 import SEO from "../components/seo";
 import Layout from "../containers/layout";
 
 export const query = graphql`
-  fragment SanityImage on SanityMainImage {
-    crop {
-      _key
-      _type
-      top
-      bottom
-      left
-      right
-    }
-    hotspot {
-      _key
-      _type
-      x
-      y
-      height
-      width
-    }
-    asset {
-      _id
-    }
-  }
-
-  query IndexPageQuery {
+  {
     site: sanitySiteSettings(_id: { regex: "/(drafts.|)siteSettings/" }) {
       title
       subtitle
       description
       keywords
     }
-    posts: allSanityPost(
-      limit: 6
-      sort: { fields: [publishedAt], order: DESC }
-      filter: { slug: { current: { ne: null } }, publishedAt: { ne: null } }
-    ) {
+    quizzes: allSanityQuizzes(limit: 6, sort: { fields: [title], order: DESC }) {
       edges {
         node {
-          id
-          publishedAt
-          mainImage {
-            ...SanityImage
-            alt
-          }
           title
-          _rawExcerpt
-          slug {
-            current
-          }
         }
       }
     }
@@ -77,11 +41,7 @@ const IndexPage = props => {
   }
 
   const site = (data || {}).site;
-  const postNodes = (data || {}).posts
-    ? mapEdgesToNodes(data.posts)
-        .filter(filterOutDocsWithoutSlugs)
-        .filter(filterOutDocsPublishedInTheFuture)
-    : [];
+  const quizNodes = (data || {}).quizzes ? mapEdgesToNodes(data.quizzes) : [];
 
   if (!site) {
     throw new Error(
@@ -89,19 +49,14 @@ const IndexPage = props => {
     );
   }
 
+  console.log("quizNodes.title", quizNodes);
   return (
     <Layout>
       <SEO title={site.title} description={site.description} keywords={site.keywords} />
       <Container>
         <h1>Welcome to {site.title}</h1>
         <h2>{site.subtitle}</h2>
-        {postNodes && (
-          <BlogPostPreviewList
-            title="Latest blog posts"
-            nodes={postNodes}
-            browseMoreHref="/archive/"
-          />
-        )}
+        {quizNodes && <Link>{quizNodes.title}</Link>}
       </Container>
     </Layout>
   );
